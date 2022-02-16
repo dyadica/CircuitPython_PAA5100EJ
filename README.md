@@ -2,7 +2,7 @@
 
 A quick and dirty Circuitpython port of the [Pimoroni](https://github.com/pimoroni/pmw3901-python) PMW3901/PAA5100EJ sensor library. Its the very first thing Ive done in either Python/CircuitPython so aint to pretty :) In addition to the aforementioned Pimoroni library; this library was also greatly inspired/aided by the Arduino port by [Bitcraze](https://github.com/bitcraze/Bitcraze_PMW3901)
 
-NB: Since completing the library I discoved an official Pico one for Micropython by Pimoroni so that may be a better option for you? This can be found [here](https://github.com/pimoroni/pimoroni-pico) Although it looks like there may be a few more hoops that will need to be jumped through to get things up and going etc (see their readme for more details)
+NB: Since completing the library I discoverd an official Pico one for Micropython by Pimoroni so that may be a better option for you? This can be found [here](https://github.com/pimoroni/pimoroni-pico) Although it looks like there may be a few more hoops that will need to be jumped through to get things up and going etc (see their readme for more details)
 
 ## Prerequisites
 
