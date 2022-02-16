@@ -45,10 +45,16 @@ class PAA5100EJ():
         self._read(0x06)    
     
         """Initialize the device registers. You dont seem to need
-        the secret ones for the PAA5100EJ!"""
+        the secret ones for the PAA5100EJ!?"""
         
         self._init_registers_secret()
-        self._init_registers()
+        
+        """ You can now chose between either the the PAA5100EJ or the PMW3901.
+            Just un-comment/comment the corresponding init_registers method"""
+        
+        self._init_registers_PAA5100EJ()        
+        # self._init_registers_PMW3901()
+        
         self._init_registers_led()
         
         """Get the product id and revision"""
@@ -56,7 +62,7 @@ class PAA5100EJ():
         print(product_id, revision)
         
         if product_id != 0x49 or revision != 0x00:
-            raise RuntimeError("Invalid Product ID or Revision for PAA5100EJ/PAA5100EJ: 0x{:02x}/0x{:02x}".format(product_id, revision))
+            raise RuntimeError("Invalid Product ID or Revision for PMW3901/PAA5100EJ: 0x{:02x}/0x{:02x}".format(product_id, revision))
 
     def get_id(self):
         """Get chip ID and revision from PMW3901/PAA5100EJ."""
@@ -104,6 +110,14 @@ class PAA5100EJ():
             spi.write(bytearray([register]))
             result = bytearray(length)
             spi.readinto(result)
+            return result
+        
+    """function to read data in to a buffer of given
+    length via calling specific register"""
+    def _register_readinto(self, register, length=1):
+        with self.spi_device as spi:
+            result = bytearray(length)
+            spi.readinto(result, register)
             return result
     
     """function used to start and stop the leds"""
@@ -197,7 +211,7 @@ class PAA5100EJ():
 
         raise RuntimeError("Timed out waiting for motion data.")
     
-    def _init_registers(self):
+    def _init_registers_PMW3901(self):
         
         print("Init Registers")
         
@@ -285,6 +299,123 @@ class PAA5100EJ():
             0x4e, 0xa8,
             0x5a, 0x50,
             0x40, 0x80,
+            "WAIT", 0xF0,
+        ])
+        
+        
+    def _init_registers_PAA5100(self):
+        
+        print("Init Registers")
+        
+        self._bulk_write([
+            0x7f, 0x00,
+            0x61, 0xad,
+
+            0x7f, 0x03,
+            0x40, 0x00,
+
+            0x7f, 0x05,
+            0x41, 0xb3,
+            0x43, 0xf1,
+            0x45, 0x14,
+
+            0x5f, 0x34,
+            0x7b, 0x08,
+            0x5e, 0x34,
+            0x5b, 0x11,
+            0x6d, 0x11,
+            0x45, 0x17,
+            0x70, 0xe5,
+            0x71, 0xe5,
+
+            0x7f, 0x06,
+            0x44, 0x1b,
+            0x40, 0xbf,
+            0x4e, 0x3f,
+
+            0x7f, 0x08,
+            0x66, 0x44,
+            0x65, 0x20,
+            0x6a, 0x3a,
+            0x61, 0x05,
+            0x62, 0x05,
+
+            0x7f, 0x09,
+            0x4f, 0xaf,
+            0x5f, 0x40,
+            0x48, 0x80,
+            0x49, 0x80,
+            0x57, 0x77,
+            0x60, 0x78,
+            0x61, 0x78,
+            0x62, 0x08,
+            0x63, 0x50,
+
+            0x7f, 0x0a,
+            0x45, 0x60,
+
+            0x7f, 0x00,
+            0x4d, 0x11,
+            0x55, 0x80,
+            0x74, 0x21,
+            0x75, 0x1f,
+            0x4a, 0x78,
+            0x4b, 0x78,
+            0x44, 0x08,
+
+            0x45, 0x50,
+            0x64, 0xff,
+            0x65, 0x1f,
+
+            0x7f, 0x14,
+            0x65, 0x67,
+            0x66, 0x08,
+            0x63, 0x70,
+            0x6f, 0x1c,
+
+            0x7f, 0x15,
+            0x48, 0x48,
+
+            0x7f, 0x07,
+            0x41, 0x0d,
+            0x43, 0x14,
+            0x4b, 0x0e,
+            0x45, 0x0f,
+            0x44, 0x42,
+            0x4c, 0x80,
+
+            0x7f, 0x10,
+            0x5b, 0x02,
+
+            0x7f, 0x07,
+            0x40, 0x41,
+
+            "WAIT", 0x0a,  # Wait 10ms
+
+            0x7f, 0x00,
+            0x32, 0x00,
+
+            0x7f, 0x07,
+            0x40, 0x40,
+
+            0x7f, 0x06,
+            0x68, 0xf0,
+            0x69, 0x00,
+
+            0x7f, 0x0d,
+            0x48, 0xc0,
+            0x6f, 0xd5,
+
+            0x7f, 0x00,
+            0x5b, 0xa0,
+            0x4e, 0xa8,
+            0x5a, 0x90,
+            0x40, 0x80,
+            0x73, 0x1f,
+
+            "WAIT", 0x0a,  # Wait 10ms
+
+            0x73, 0x00
         ])
         
     def _init_registers_secret(self):

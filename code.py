@@ -10,7 +10,6 @@ cs = digitalio.DigitalInOut(board.D4)
 cs.direction = digitalio.Direction.OUTPUT
 
 oflow = paa5100ej.PAA5100EJ(spi, cs)
-oflow.set_led_state(True)
 oflow.set_rotation(0)
 
 tx = 0
